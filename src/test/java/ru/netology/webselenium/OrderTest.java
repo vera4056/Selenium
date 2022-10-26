@@ -21,7 +21,8 @@ public class OrderTest {
 
     @BeforeAll
 
-    public static void setUp() { WebDriverManager.chromedriver().setup();
+    public static void setUp() {
+        WebDriverManager.chromedriver().setup();
         System.setProperty("web-driver.chrome.driver", "/driver/win/chromedriver.exe");
 
     }
@@ -29,7 +30,8 @@ public class OrderTest {
 
     @BeforeEach
 
-    public void beforeEach() { driver = new ChromeDriver();
+    public void beforeEach() {
+        driver = new ChromeDriver();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
@@ -38,36 +40,44 @@ public class OrderTest {
         this.driver.get("http://localhost:9999/");
 
 
-
     }
 
 
     @AfterEach
-
     void tearDown() {
         driver.quit();
         driver = null;
     }
 
     @Test
-
     void shouldTest1() throws InterruptedException {
-     driver.get("http://localhost:9999/");
-     List<WebElement> inputs = driver.findElements(By.tagName("input"));
-     inputs.get(0).sendKeys("Сергей Иванов");
-     inputs.get(1).sendKeys("+79999999991");
+        List<WebElement> inputs = driver.findElements(By.tagName("input"));
+        inputs.get(0).sendKeys("Сергей Иванов");
+        inputs.get(1).sendKeys("+79999999991");
 
-     Thread.sleep(8000);
-     driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
-    driver.findElement(By.cssSelector("button.button")).click();
-    String expected = "Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
-    String actual = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText();
-    assertEquals(expected, actual);
-
-
+        Thread.sleep(8000);
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button.button")).click();
+        String expected = "Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
+        String actual = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText().trim();
+        assertEquals(expected, actual);
 
 
     }
 
 
+
+    @Test
+
+    void shouldTestIncorrectName() {
+
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Fghjkllllllllll");
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("+79999999991");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button.button")).click();
+        String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
+        String actual = driver.findElement(By.cssSelector("[span class=\"input__sub\"]")).getText().trim();
+        assertEquals(expected, actual);
+
+    }
 }
