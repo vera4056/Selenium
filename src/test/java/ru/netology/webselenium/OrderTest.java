@@ -23,7 +23,7 @@ public class OrderTest {
 
     public static void setUp() {
         WebDriverManager.chromedriver().setup();
-        System.setProperty("web-driver.chrome.driver", "/driver/win/chromedriver.exe");
+
 
     }
 
@@ -31,7 +31,6 @@ public class OrderTest {
     @BeforeEach
 
     public void beforeEach() {
-        driver = new ChromeDriver();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
@@ -50,12 +49,10 @@ public class OrderTest {
     }
 
     @Test
-    void shouldTest1() throws InterruptedException {
+    void shouldTest1()  {
         List<WebElement> inputs = driver.findElements(By.tagName("input"));
         inputs.get(0).sendKeys("Сергей Иванов");
         inputs.get(1).sendKeys("+79999999991");
-
-        Thread.sleep(8000);
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
         driver.findElement(By.cssSelector("button.button")).click();
         String expected = "Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
