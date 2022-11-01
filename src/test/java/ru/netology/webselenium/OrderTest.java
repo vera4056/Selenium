@@ -41,7 +41,6 @@ public class OrderTest {
 
     }
 
-
     @AfterEach
     void tearDown() {
         driver.quit();
@@ -51,8 +50,8 @@ public class OrderTest {
     @Test
     void shouldTest1()  {
         List<WebElement> inputs = driver.findElements(By.tagName("input"));
-        inputs.get(0).sendKeys("Сергей Иванов");
-        inputs.get(1).sendKeys("+79999999991");
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Сергей Иванов-Петров");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79999999991");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
         driver.findElement(By.cssSelector("button.button")).click();
         String expected = "Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
@@ -69,7 +68,7 @@ public class OrderTest {
     void shouldTestIncorrectName() {
 
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Fghjkllllllllll");
-        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("+79999999991");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79999999991");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
         driver.findElement(By.cssSelector("button.button")).click();
         String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
